@@ -131,6 +131,7 @@ func embedsType(i interface{}, e reflect.Type) bool {
 		t = reflect.TypeOf(i)
 	}
 
+	// 进行广度优先查询
 	// We are going to do a breadth-first search of all embedded fields.
 	types := list.New()
 	types.PushBack(t)

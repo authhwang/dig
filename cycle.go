@@ -122,6 +122,9 @@ func detectCycles(n provider, c containerStore, path []cycleEntry, visited map[k
 			// is only being called before the first Invoke, each node in the
 			// graph will be tested as the first element of the path, so any
 			// cycle that exists is guaranteed to trip the following condition.
+
+
+			// 当一个结构体a依赖结构体b，同时b又依赖a
 			if path[0].Key == k {
 				err = errCycleDetected{Path: append(path, entry)}
 				return false

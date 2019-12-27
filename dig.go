@@ -467,6 +467,7 @@ func (c *Container) Invoke(function interface{}, opts ...InvokeOption) error {
 		}
 	}
 
+	//传入invoke内的所需参数，并调用该闭包
 	returned := reflect.ValueOf(function).Call(args)
 	if len(returned) == 0 {
 		return nil
@@ -637,6 +638,8 @@ func (cv connectionVisitor) Visit(res result) resultVisitor {
 	return cv
 }
 
+
+//检查该类型是否已在keyPaths 或 container.providers重复出现
 func (cv connectionVisitor) checkKey(k key, path string) error {
 	if conflict, ok := cv.keyPaths[k]; ok {
 		return fmt.Errorf(
@@ -778,6 +781,8 @@ func isFieldOptional(f reflect.StructField) (bool, error) {
 
 // Checks that all direct dependencies of the provided param are present in
 // the container. Returns an error if not.
+
+//检查container下的Provider的所对应依赖是否会有缺失
 func shallowCheckDependencies(c containerStore, p param) error {
 	var missing errMissingManyTypes
 	var addMissingNodes []*dot.Param

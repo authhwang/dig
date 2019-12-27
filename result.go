@@ -66,6 +66,8 @@ type resultOptions struct {
 }
 
 // newResult builds a result from the given type.
+// 会将构造方法的输出结果转为三种类型 newResultObject newResultGrouped newResultSingle
+// newResultSingle 不含Group 和 dig.Out  
 func newResult(t reflect.Type, opts resultOptions) (result, error) {
 	switch {
 	case IsIn(t) || (t.Kind() == reflect.Ptr && IsIn(t.Elem())) || embedsType(t, _inPtrType):
@@ -181,6 +183,9 @@ func (rl resultList) DotResult() []*dot.Result {
 	return types
 }
 
+
+// ctype = 构造方法的输出结果
+//newResultList 是将所有输出类型以newResult**重新封装 并存入resultList结构体中
 func newResultList(ctype reflect.Type, opts resultOptions) (resultList, error) {
 	numOut := ctype.NumOut()
 	rl := resultList{
@@ -217,6 +222,7 @@ func (resultList) Extract(containerWriter, reflect.Value) {
 		"resultList.Extract() must never be called")
 }
 
+//提取构造方法内的返回结果 并存入cw.values
 func (rl resultList) ExtractList(cw containerWriter, values []reflect.Value) error {
 	for i, v := range values {
 		if resultIdx := rl.resultIndexes[i]; resultIdx >= 0 {
